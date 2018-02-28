@@ -42,6 +42,8 @@ import org.xml.sax.InputSource;
  * While this filter works without a dictionary it is <b>highly</b> recommended
  * to provide one as otherwise results would be the the last syllable of the
  * token what is not very helpful in most situations
+ * 
+ * @author Rupert Westenthaler
  */
 public class PrimaryWordTokenFilter extends CompoundWordTokenFilterBase {
 

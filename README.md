@@ -28,13 +28,14 @@ The factory accepts the following parameters:
 <fieldType name="text_hyphncomp" class="solr.TextField" positionIncrementGap="100">
   <analyzer>
     <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-    <filter class="solr.PrimaryWordTokenFilterFactory" hyphenator="hyphenator.xml" encoding="UTF-8"
-        dictionary="dictionary.txt" minWordSize="5" minSubwordSize="2" maxSubwordSize="15" onlyLongestMatch="true"/>
+    <filter class="PrimaryWordTokenFilterFactory" hyphenator="hyphenator.xml" encoding="UTF-8"
+        dictionary="dictionary.txt" minWordSize="5" minSubwordSize="2" maxSubwordSize="15"
+        onlyLongestMatch="true"/>
   </analyzer>
 </fieldType>
  ``` 
  
- ##License
+ ## License
  
  [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
  
