@@ -1,5 +1,7 @@
 # Redlink Compound Word Filters
 
+[![Build Status](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter.svg?branch=master)](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter)
+
 ## HyphenationCompoundWordTokenFilter
 
 Redlink version of the `solr.HyphenationCompoundWordTokenFilterFactory` with the fix
