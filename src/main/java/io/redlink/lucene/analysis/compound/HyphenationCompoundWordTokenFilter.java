@@ -17,6 +17,8 @@
 package io.redlink.lucene.analysis.compound;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
@@ -37,9 +39,13 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   private boolean noSubMatches;
   private boolean noOverlappingMatches;
   private boolean calcSubMatches;
-
   /**
-   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
+   * The epenthesis (In German 'Fugenlaute')
+   */
+  private final String[] epenthesis;
+  
+  /**
+   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -50,12 +56,12 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator, CharArraySet dictionary) {
-    this(input, hyphenator, dictionary, DEFAULT_MIN_WORD_SIZE,
+    this(input, hyphenator, dictionary, null, DEFAULT_MIN_WORD_SIZE,
         DEFAULT_MIN_SUBWORD_SIZE, DEFAULT_MAX_SUBWORD_SIZE, false, false, false);
   }
 
   /**
-   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
+   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -75,12 +81,12 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   public HyphenationCompoundWordTokenFilter(TokenStream input,
       HyphenationTree hyphenator, CharArraySet dictionary, int minWordSize,
       int minSubwordSize, int maxSubwordSize, boolean onlyLongestMatch) {
-    this(input, hyphenator, dictionary, minWordSize, minSubwordSize,
+    this(input, hyphenator, dictionary, null, minWordSize, minSubwordSize,
         maxSubwordSize, onlyLongestMatch, false, false);
   }
   
   /**
-   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
+   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -88,6 +94,8 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    *          the hyphenation pattern tree to use for hyphenation
    * @param dictionary
    *          the word dictionary to match against.
+   * @param epenthesis
+   *          sounds (chars) added to the interior of compound words. 
    * @param minWordSize
    *          only words longer than this get processed
    * @param minSubwordSize
@@ -102,13 +110,14 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    *          Excludes subwords that overlap with an other subword
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
-                                            HyphenationTree hyphenator, CharArraySet dictionary, int minWordSize,
-                                            int minSubwordSize, int maxSubwordSize, boolean onlyLongestMatch,
-                                            boolean noSubMatches, boolean noOverlappingMatches) {
+                                            HyphenationTree hyphenator, CharArraySet dictionary, String[] epenthesis,
+                                            int minWordSize, int minSubwordSize, int maxSubwordSize, 
+                                            boolean onlyLongestMatch, boolean noSubMatches, boolean noOverlappingMatches) {
     super(input, dictionary, minWordSize, minSubwordSize, maxSubwordSize,
         onlyLongestMatch);
 
     this.hyphenator = hyphenator;
+    this.epenthesis = epenthesis;
     this.noSubMatches = noSubMatches;
     this.noOverlappingMatches = noOverlappingMatches;
     this.calcSubMatches = !onlyLongestMatch && !noSubMatches && !noOverlappingMatches;
@@ -124,7 +133,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator, int minWordSize, int minSubwordSize,
                                             int maxSubwordSize) {
-    this(input, hyphenator, null, minWordSize, minSubwordSize,
+    this(input, hyphenator, null, null, minWordSize, minSubwordSize,
         maxSubwordSize, false, false, false);
   }
 
@@ -214,26 +223,81 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
           // calculation above, and we rely upon minSubwordSize being >=0 to filter them out...
           break; 
         }
-
-        // check the dictionary
+        final CompoundToken token;
         if (dictionary == null || dictionary.contains(termAtt.buffer(), start, partLength)) {
-          tokens.add(new CompoundToken(start, partLength));
+          token = new CompoundToken(start, partLength);
+        } else { //we do have a dictionary
+          //NOTE: no epenthesis at the end of the word!
+          final int epenthesisLength = j < hyp.length - 1 ? epenthesisLength(start, partLength) : 0; 
+          if(epenthesisLength > 0 && partLength - epenthesisLength >= this.minSubwordSize &&  
+              dictionary.contains(termAtt.buffer(), start, partLength - epenthesisLength)){
+            token = new CompoundToken(start, partLength - epenthesisLength);
+          } else {
+            token = null;
+          }
+        }
+        if(token != null){
+          tokens.add(token);
           consumed = j; //mark the current hyp as consumed
           if(!calcSubMatches){
             break; //do not search for shorter matches
           }
-        } else if (partLength > this.minSubwordSize && 
-            dictionary.contains(termAtt.buffer(), start, partLength - 1)) {
-          // check the dictionary again with a word that is one character
-          // shorter to avoid problems with genitive 's characters and
-          // other binding characters
-          tokens.add(new CompoundToken(start, partLength - 1));
-          consumed = j; //mark the current hyp as consumed
-          if(!calcSubMatches){
-            break; //do not search for shorter matches
-          }
-        } //else dictionary is present but does not contain the part
+        }
       }
     }
   }
+  /**
+   * checks configured epenthesis and returns the length of a such
+   * @param start start of the part
+   * @param partLength the part lengs
+   * @return the number of chars representing the epenthesis or<code>0</code> if none
+   */
+  int epenthesisLength(int start, int partLength){
+    if(epenthesis == null || epenthesis.length < 1){
+        return 0;
+    }
+    CharSequence part = termAtt.subSequence(start, start + partLength);
+    //TODO: maybe we should check all or the longest instead of the first
+    return Arrays.stream(epenthesis)
+            .filter(Objects::nonNull).filter(searchString -> searchString.length() > 0) // ignore null end empty
+            .filter(searchString -> searchString.length() < part.length()) // ignore to long
+            .filter(searchString -> regionMatches(part, part.length() - searchString.length(), searchString, 0, searchString.length()))
+            .findFirst().orElse("").length();
+  }
+  
+  /*
+   * copied from Apache commons lang3 CharSequenceUtils
+   */
+  static boolean regionMatches(final CharSequence cs, final int thisStart,
+          final CharSequence substring, final int start, final int length)    {
+      int index1 = thisStart;
+      int index2 = start;
+      int tmpLen = length;
+
+      // Extract these first so we detect NPEs the same as the java.lang.String version
+      final int srcLen = cs.length() - thisStart;
+      final int otherLen = substring.length() - start;
+
+      // Check for invalid parameters
+      if (thisStart < 0 || start < 0 || length < 0) {
+          return false;
+      }
+
+      // Check that the regions are long enough
+      if (srcLen < length || otherLen < length) {
+          return false;
+      }
+
+      while (tmpLen-- > 0) {
+          final char c1 = cs.charAt(index1++);
+          final char c2 = substring.charAt(index2++);
+
+          if (c1 == c2) {
+              continue;
+          }
+          return false;
+      }
+      return true;
+  }
+  
 }

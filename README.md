@@ -4,8 +4,25 @@
 
 ## HyphenationCompoundWordTokenFilter
 
-Redlink version of the `solr.HyphenationCompoundWordTokenFilterFactory` with the fix
-for [LUCENE-8183](https://issues.apache.org/jira/browse/LUCENE-8183)
+Redlink version of the `solr.HyphenationCompoundWordTokenFilterFactory` with the fix for [LUCENE-8183](https://issues.apache.org/jira/browse/LUCENE-8183) and support for the [`epenthesis`](https://en.wikipedia.org/wiki/Epenthesis) parameter that allows to configure characters added between subwords in compound words.
+
+### `epenthesis` Parameter
+
+If the current part is not in the dictionary (and a dictionary is present) the original `solr.HyphenationCompoundWordTokenFilterFactory` always tries to remove the last character to makes an additional dictionary lookup.
+
+This version instead checks if current part end with a configured epenthesis. Only if this is the case the epenthesis is striped of the part and an additional dictionary lookup is made.
+
+This allows for a fine control over this functionality preventing unexpected matches in the dictionary.
+
+__German__
+
+For German epenthesis are typically called 'Fügenlaute'. Based on [1](https://www.linguistik.hu-berlin.de/de/institut/professuren/korpuslinguistik/lehre/alte_jahrgaenge/ws-2003/hs-phaenomene-deutsch/pdf/phaeno-kp-fugen.pdf) about 27% of all compound words to use a 'Fügenlaute' and about 15% of those do use '-[e]s' and an additioanl 9% '-[e]n'. 
+
+Based on this setting `epenthesis="es,s,en,n"` but as `en,n` typically also represents the plural and will theirfore be in the dictionary it is sufficient to set `epenthesis="es,s"`
+
+To improve results it is important to ensure that words including the 'Fügenlaut' `s` are NOT in the dictionary as this will result that those will be added as tokens. Stemmers will NOT remove those `s` at the end and typical queries searches will NOT match those.
+
+To give an example: Assuming the Dictionary contains 'ausbildungs', 'ausbildung' and 'leiter' the word 'Ausbildungsleiter' will be decomposed to 'ausbildungs' and 'leiter'. If the stemmer does not remove the tailing 's' queries for 'Ausbildung' will not match the decomposed word.
 
 ## PrimaryWordTikenFilter
 
@@ -30,9 +47,9 @@ The factory accepts the following parameters:
 <fieldType name="text_hyphncomp" class="solr.TextField" positionIncrementGap="100">
   <analyzer>
     <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-    <filter class="PrimaryWordTokenFilterFactory" hyphenator="hyphenator.xml" encoding="UTF-8"
-        dictionary="dictionary.txt" minWordSize="5" minSubwordSize="2" maxSubwordSize="15"
-        onlyLongestMatch="true"/>
+    <filter class="io.redlink.lucene.analysis.compound.PrimaryWordTokenFilterFactory"
+        hyphenator="hyphenator.xml" encoding="UTF-8" dictionary="dictionary.txt" 
+        minWordSize="5" minSubwordSize="2" maxSubwordSize="15" onlyLongestMatch="true"/>
   </analyzer>
 </fieldType>
  ``` 

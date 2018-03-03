@@ -41,6 +41,8 @@ import org.xml.sax.InputSource;
  *  See <a href="http://offo.sourceforge.net/hyphenation/">http://offo.sourceforge.net/hyphenation/</a>.
  *  <li><code>encoding</code> (optional): encoding of the xml hyphenation file. defaults to UTF-8.
  *  <li><code>dictionary</code> (optional): dictionary of words. defaults to no dictionary.
+ *  <li><code>epenthesis</code> (optional): comma separated list of epenthesis (e.g. 's' for German). The
+ *  first matching value is used. So ordering is important. defaults to emtpy
  *  <li><code>minWordSize</code> (optional): minimal word length that gets decomposed. defaults to 5.
  *  <li><code>minSubwordSize</code> (optional): minimum length of subwords. defaults to 2.
  *  <li><code>maxSubwordSize</code> (optional): maximum length of subwords. defaults to 15.
@@ -53,7 +55,7 @@ import org.xml.sax.InputSource;
  *   &lt;analyzer&gt;
  *     &lt;tokenizer class="solr.WhitespaceTokenizerFactory"/&gt;
  *     &lt;filter class="solr.HyphenationCompoundWordTokenFilterFactory" hyphenator="hyphenator.xml" encoding="UTF-8"
- *         dictionary="dictionary.txt" minWordSize="5" minSubwordSize="2" maxSubwordSize="15" onlyLongestMatch="false"/&gt;
+ *         dictionary="dictionary.txt" epenthesis="s", minWordSize="5" minSubwordSize="2" maxSubwordSize="15" onlyLongestMatch="false"/&gt;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  *
@@ -72,6 +74,7 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
   private final boolean onlyLongestMatch;
   private final boolean noSubMatches;
   private final boolean noOverlappingMatches;
+  private final String[] epenthesis;
   
   /** Creates a new HyphenationCompoundWordTokenFilterFactory */
   public HyphenationCompoundWordTokenFilterFactory(Map<String, String> args) {
@@ -79,6 +82,7 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
     dictFile = get(args, "dictionary");
     encoding = get(args, "encoding");
     hypFile = require(args, "hyphenator");
+    epenthesis = get(args, "epenthesis","").split(",");
     minWordSize = getInt(args, "minWordSize", CompoundWordTokenFilterBase.DEFAULT_MIN_WORD_SIZE);
     minSubwordSize = getInt(args, "minSubwordSize", CompoundWordTokenFilterBase.DEFAULT_MIN_SUBWORD_SIZE);
     maxSubwordSize = getInt(args, "maxSubwordSize", CompoundWordTokenFilterBase.DEFAULT_MAX_SUBWORD_SIZE);
@@ -110,6 +114,6 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
   
   @Override
   public TokenFilter create(TokenStream input) {
-    return new HyphenationCompoundWordTokenFilter(input, hyphenator, dictionary, minWordSize, minSubwordSize, maxSubwordSize, onlyLongestMatch, noSubMatches, noOverlappingMatches);
+    return new HyphenationCompoundWordTokenFilter(input, hyphenator, dictionary, epenthesis, minWordSize, minSubwordSize, maxSubwordSize, onlyLongestMatch, noSubMatches, noOverlappingMatches);
   }
 }
