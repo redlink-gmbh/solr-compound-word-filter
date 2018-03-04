@@ -254,7 +254,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    */
   int epenthesisLength(int start, int partLength){
     if(epenthesis == null || epenthesis.length < 1){
-        return 0;
+        return 1; //this is the old default!
     }
     CharSequence part = termAtt.subSequence(start, start + partLength);
     //TODO: maybe we should check all or the longest instead of the first

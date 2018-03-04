@@ -14,6 +14,8 @@ This version instead checks if current part end with a configured epenthesis. On
 
 This allows for a fine control over this functionality preventing unexpected matches in the dictionary.
 
+To keep backward compatibility it no `epenthesis` is configured the old behavior of stripping the last char is kept.  
+
 __German__
 
 For German epenthesis are typically called 'Fügenlaute'. Based on [1](https://www.linguistik.hu-berlin.de/de/institut/professuren/korpuslinguistik/lehre/alte_jahrgaenge/ws-2003/hs-phaenomene-deutsch/pdf/phaeno-kp-fugen.pdf) about 27% of all compound words to use a 'Fügenlaute' and about 15% of those do use '-[e]s' and an additioanl 9% '-[e]n'. 
