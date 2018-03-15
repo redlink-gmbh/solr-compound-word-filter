@@ -90,7 +90,13 @@
 		    <artifactId>lucene-analyzers-common</artifactId>
 			<version>${solr.version}</version>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>20.0</version> <!-- newer versions are incompatible with Solr Highlighting -->
+		</dependency>
+		
 		<!-- LOGGING -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

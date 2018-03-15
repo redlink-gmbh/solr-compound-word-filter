@@ -1,10 +1,23 @@
-# Redlink Compound Word Filters
+# Redlink Lucene Analysis Components
 
 [![Build Status](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter.svg?branch=master)](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter)
 
 ## HyphenationCompoundWordTokenFilter
 
 Redlink version of the `solr.HyphenationCompoundWordTokenFilterFactory` with the fix for [LUCENE-8183](https://issues.apache.org/jira/browse/LUCENE-8183) and support for the [`epenthesis`](https://en.wikipedia.org/wiki/Epenthesis) parameter that allows to configure characters added between subwords in compound words.
+
+### `ignoreCase` Parameter
+
+The `solr.HyphenationCompoundWordTokenFilterFactory` does not support the `ignoreCase` parameter.
+
+The typicall workaround is to 
+
+1. add the `solr.LowerCaseFilterFactory` before and
+2. convert the dictionary to lower case
+
+However their are some cases where this workaround does not work as some other TokenFilter do change the case of tokens. One example is the `solr.StemmerOverrideFilterFactory` when used with `ignoreCase="true"` and an case sensitive dictionary. In those setting it is required to place the `solr.LowerCaseFilterFactory` afterwards as otherwise one would risk having mixed case tokens in the token stream. 
+
+The `ignoreCase="true"` option solves this issue as it allows this factory to work work in a case insensitive manner before the `solr.LowerCaseFilterFactory`
 
 ### `epenthesis` Parameter
 
@@ -56,6 +69,50 @@ The factory accepts the following parameters:
 </fieldType>
  ``` 
  
+ ## ResourceCache
+ 
+The ResourceCache allows to share memory intensive reosurces between `TokenFilter`. This is especially useful for `TokenFilter` that use in-memory representations of dictionaries such as the `HunspellStemFilter`, `StemmOverrideFilter` or the CompoundWordFilter
+
+With typical Solr configurations multiple instances with matching configuration are created. Typical examples are: 
+
+* index and query time Analyzer often use the same TokenFilter configuration
+* different `TextField` may use the same `TokenFilter` configuration
+* all cores created for the same ConfigSet will instantiate the same TokenFilters (if shared schema is not enabled in the `solr.xml`)
+* Even different Cores and/or ConfigSets might use the same TikenFilter configurations
+
+So in a Setting with two German Language Fields both using the same Hunspell stemmer configuration for both index and query time analyzers and 20 cores the Hunspell dictionary would be loaded 80 times in Memory!
+
+The `HunspellStemFilter` is the best example as it has the highest memory requirements. [SOLR-3443](https://issues.apache.org/jira/browse/SOLR-3443) is releated and describes exactly this problem.
+
+The `ResourceCache` provides a solution to this problem as it provides a framework that allows TokenFilter factories to get resources from a cache.
+
+TokenFilterFactory need to be adapted to make use of the `ResourceCache`. Because of that this module includes adapted versions of the `HunspellSemmFilterFactory` and the `StemmerOverwriteFilterFactory`. In addition all the other FilterFactory implementations provided by this module do also support the `ResourceCache`
+
+### Solr Classpath and the ResourceCache
+
+The `ResourceCache` uses a singelton pattern. For the JVM this means one instance per `Classloader`.  Solr `ResourceLoader` builds Solr Core specific Classloader for all resources from the Core/ConfigSet specific `lib` folder.
+
+Because of this if this modules `jar` is provided via the cores `lib` every Core will have its own `ResourceCache` instance and resources will only be shared within a core. This will limit the functionality.
+
+With the above Example the German Hunspell dictionary would be loaded 20 times instead of the 80 times with no `ResourceCache`.
+
+To share Resources with multiple cores one needs to provide the `jar` in the `sharedLib` folder (a configuration in the `solr.xml`
+
+### Implementation Notes
+
+* As Lucene does not define a lifecycle for `TokenFilterFactory` components 
+this cache can not use `RefCount`. Instead it uses `WeakReference` 
+to hold in Resources. So it is up to the garbage collector to decide when a Resource
+is no longer needed
+* The cache uses the Factory Pattern to avoid extending the ResourceLoader or
+adding a ResouceCacheAware callback.
+* `ResourceType` definition provide type savety and `ResourceTypeLoader`
+implement the actual loading od resources (if not cached).
+* The `ResourceRef` has two responsibilities: First it iss used as key for 
+the cache so it define equivalence for Resources. Second it needs to provide all the
+information required by the `ResourceTypeLoader` to load the referenced resource
+* Currently their is no way to enable/disable the `ResourceCache`. Using the Redlink versions of the TokenFilter factories will enable the usage of the `ResourceCache`
+
  ## License
  
  [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
