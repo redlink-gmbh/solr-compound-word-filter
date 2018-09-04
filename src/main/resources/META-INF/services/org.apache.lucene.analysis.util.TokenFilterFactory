@@ -16,3 +16,4 @@
 #  limitations under the License.
 
 io.redlink.lucene.analysis.compound.PrimaryWordTokenFilterFactory
+io.redlink.lucene.analysis.de.FugenSTokenFilterFactory
