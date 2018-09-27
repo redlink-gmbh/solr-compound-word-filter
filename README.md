@@ -1,6 +1,8 @@
 # Redlink Lucene Analysis Components
 
 [![Build Status](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter.svg?branch=master)](https://travis-ci.org/redlink-gmbh/solr-compound-word-filter)
+[![Maven Central](https://img.shields.io/maven-central/v/io.redlink.solr/compound-word-filter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.redlink.solr%22)
+[![Sonatype (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.redlink.solr/compound-word-filter.svg)](https://oss.sonatype.org/#nexus-search;gav~io.redlink.solr~compound-word-filter~~~)
 
 ## HyphenationCompoundWordTokenFilter
 
