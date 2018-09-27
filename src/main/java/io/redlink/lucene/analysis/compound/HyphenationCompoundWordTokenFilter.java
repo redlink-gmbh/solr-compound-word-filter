@@ -43,7 +43,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    * The epenthesis (In German 'Fugenlaute')
    */
   private final String[] epenthesis;
-  
+
   /**
    * Creates a new {@link GermanCompoundWordTokenFilter} instance.
    *
@@ -57,7 +57,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator, CharArraySet dictionary) {
     this(input, hyphenator, dictionary, null, DEFAULT_MIN_WORD_SIZE,
-        DEFAULT_MIN_SUBWORD_SIZE, DEFAULT_MAX_SUBWORD_SIZE, false, false, false);
+            DEFAULT_MIN_SUBWORD_SIZE, DEFAULT_MAX_SUBWORD_SIZE, false, false, false);
   }
 
   /**
@@ -79,12 +79,12 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    *          Add only the longest matching subword for each hyphenation to the stream
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
-      HyphenationTree hyphenator, CharArraySet dictionary, int minWordSize,
-      int minSubwordSize, int maxSubwordSize, boolean onlyLongestMatch) {
+                                            HyphenationTree hyphenator, CharArraySet dictionary, int minWordSize,
+                                            int minSubwordSize, int maxSubwordSize, boolean onlyLongestMatch) {
     this(input, hyphenator, dictionary, null, minWordSize, minSubwordSize,
-        maxSubwordSize, onlyLongestMatch, false, false);
+            maxSubwordSize, onlyLongestMatch, false, false);
   }
-  
+
   /**
    * Creates a new {@link GermanCompoundWordTokenFilter} instance.
    *
@@ -111,10 +111,10 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator, CharArraySet dictionary, String[] epenthesis,
-                                            int minWordSize, int minSubwordSize, int maxSubwordSize, 
+                                            int minWordSize, int minSubwordSize, int maxSubwordSize,
                                             boolean onlyLongestMatch, boolean noSubMatches, boolean noOverlappingMatches) {
     super(input, dictionary, minWordSize, minSubwordSize, maxSubwordSize,
-        onlyLongestMatch);
+            onlyLongestMatch);
 
     this.hyphenator = hyphenator;
     this.epenthesis = epenthesis;
@@ -134,7 +134,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
                                             HyphenationTree hyphenator, int minWordSize, int minSubwordSize,
                                             int maxSubwordSize) {
     this(input, hyphenator, null, null, minWordSize, minSubwordSize,
-        maxSubwordSize, false, false, false);
+            maxSubwordSize, false, false, false);
   }
 
   /**
@@ -147,7 +147,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator) {
     this(input, hyphenator, DEFAULT_MIN_WORD_SIZE, DEFAULT_MIN_SUBWORD_SIZE,
-        DEFAULT_MAX_SUBWORD_SIZE);
+            DEFAULT_MAX_SUBWORD_SIZE);
   }
 
   /**
@@ -158,7 +158,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    * @throws java.io.IOException If there is a low-level I/O error.
    */
   public static HyphenationTree getHyphenationTree(String hyphenationFilename)
-      throws IOException {
+          throws IOException {
     return getHyphenationTree(new InputSource(hyphenationFilename));
   }
 
@@ -170,7 +170,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    * @throws java.io.IOException If there is a low-level I/O error.
    */
   public static HyphenationTree getHyphenationTree(InputSource hyphenationSource)
-      throws IOException {
+          throws IOException {
     HyphenationTree tree = new HyphenationTree();
     tree.loadPatterns(hyphenationSource);
     return tree;
@@ -183,12 +183,12 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
     //NOTE: 
     //we check against token and the token that is one character
     //shorter to avoid problems with genitive 's characters and other binding characters
-    if(dictionary != null && !this.calcSubMatches && 
-      (dictionary.contains(termAtt.buffer(), 0, termAtt.length()) ||
-          termAtt.length() > 1 && dictionary.contains(termAtt.buffer(), 0, termAtt.length() - 1))){
-    return; //the whole token is in the dictionary - do not decompose
+    if(dictionary != null && !this.calcSubMatches &&
+            (dictionary.contains(termAtt.buffer(), 0, termAtt.length()) ||
+                    termAtt.length() > 1 && dictionary.contains(termAtt.buffer(), 0, termAtt.length() - 1))){
+      return; //the whole token is in the dictionary - do not decompose
     }
-    
+
     // get the hyphenation points
     Hyphenation hyphens = hyphenator.hyphenate(termAtt.buffer(), 0, termAtt.length(), 1, 1);
     // No hyphen points found -> exit
@@ -200,7 +200,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
     final int[] hyp = hyphens.getHyphenationPoints();
 
     int consumed = -1; //hyp of the longest token added (for noSub)
-    
+
     for (int i = 0; i < hyp.length; ++i) {
       if(noOverlappingMatches){ //if we do not want overlapping subwords
         i = Math.max(i, consumed); //skip over consumed hyp
@@ -221,16 +221,16 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
         if (partLength < this.minSubwordSize) {
           // BOGUS/BROKEN/FUNKY/WACKO: somehow we have negative 'parts' according to the 
           // calculation above, and we rely upon minSubwordSize being >=0 to filter them out...
-          break; 
+          break;
         }
         final CompoundToken token;
         if (dictionary == null || dictionary.contains(termAtt.buffer(), start, partLength)) {
           token = new CompoundToken(start, partLength);
         } else { //we do have a dictionary
           //NOTE: no epenthesis at the end of the word!
-          final int epenthesisLength = j < hyp.length - 1 ? epenthesisLength(start, partLength) : 0; 
-          if(epenthesisLength > 0 && partLength - epenthesisLength >= this.minSubwordSize &&  
-              dictionary.contains(termAtt.buffer(), start, partLength - epenthesisLength)){
+          final int epenthesisLength = j < hyp.length - 1 ? epenthesisLength(start, partLength) : 0;
+          if(epenthesisLength > 0 && partLength - epenthesisLength >= this.minSubwordSize &&
+                  dictionary.contains(termAtt.buffer(), start, partLength - epenthesisLength)){
             token = new CompoundToken(start, partLength - epenthesisLength);
           } else {
             token = null;
@@ -254,7 +254,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
    */
   int epenthesisLength(int start, int partLength){
     if(epenthesis == null || epenthesis.length < 1){
-        return 1; //this is the old default!
+      return 1; //this is the old default!
     }
     CharSequence part = termAtt.subSequence(start, start + partLength);
     //TODO: maybe we should check all or the longest instead of the first
@@ -264,40 +264,40 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
             .filter(searchString -> regionMatches(part, part.length() - searchString.length(), searchString, 0, searchString.length()))
             .findFirst().orElse("").length();
   }
-  
+
   /*
    * copied from Apache commons lang3 CharSequenceUtils
    */
   static boolean regionMatches(final CharSequence cs, final int thisStart,
-          final CharSequence substring, final int start, final int length)    {
-      int index1 = thisStart;
-      int index2 = start;
-      int tmpLen = length;
+                               final CharSequence substring, final int start, final int length)    {
+    int index1 = thisStart;
+    int index2 = start;
+    int tmpLen = length;
 
-      // Extract these first so we detect NPEs the same as the java.lang.String version
-      final int srcLen = cs.length() - thisStart;
-      final int otherLen = substring.length() - start;
+    // Extract these first so we detect NPEs the same as the java.lang.String version
+    final int srcLen = cs.length() - thisStart;
+    final int otherLen = substring.length() - start;
 
-      // Check for invalid parameters
-      if (thisStart < 0 || start < 0 || length < 0) {
-          return false;
+    // Check for invalid parameters
+    if (thisStart < 0 || start < 0 || length < 0) {
+      return false;
+    }
+
+    // Check that the regions are long enough
+    if (srcLen < length || otherLen < length) {
+      return false;
+    }
+
+    while (tmpLen-- > 0) {
+      final char c1 = cs.charAt(index1++);
+      final char c2 = substring.charAt(index2++);
+
+      if (c1 == c2) {
+        continue;
       }
-
-      // Check that the regions are long enough
-      if (srcLen < length || otherLen < length) {
-          return false;
-      }
-
-      while (tmpLen-- > 0) {
-          final char c1 = cs.charAt(index1++);
-          final char c2 = substring.charAt(index2++);
-
-          if (c1 == c2) {
-              continue;
-          }
-          return false;
-      }
-      return true;
+      return false;
+    }
+    return true;
   }
-  
+
 }

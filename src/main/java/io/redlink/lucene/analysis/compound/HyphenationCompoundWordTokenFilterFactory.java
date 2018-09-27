@@ -69,10 +69,10 @@ import io.redlink.lucene.analysis.util.ResourceCache.ResourceType;
 public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactory implements ResourceLoaderAware {
 
   private static final ResourceType<HyphDictionaryConfig, CharArraySet> RESOURCE_DICT = new ResourceType<>(
-      HyphenationCompoundWordTokenFilterFactory.class.getName() + ".dictionary", HyphDictionaryConfig.class, CharArraySet.class);
+          HyphenationCompoundWordTokenFilterFactory.class.getName() + ".dictionary", HyphDictionaryConfig.class, CharArraySet.class);
   private static final ResourceType<HyphenatorConfig, HyphenationTree> RESOURCE_HYPH = new ResourceType<>(
           HyphenationCompoundWordTokenFilterFactory.class.getName() + ".hyphenator", HyphenatorConfig.class, HyphenationTree.class);
-    
+
   private CharArraySet dictionary;
   private HyphenationTree hyphenator;
   private final String dictFile;
@@ -86,9 +86,9 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
   private final boolean noSubMatches;
   private final boolean noOverlappingMatches;
   private final String[] epenthesis;
-  
+
   private final ResourceCache cache;
-  
+
   /** Creates a new HyphenationCompoundWordTokenFilterFactory */
   public HyphenationCompoundWordTokenFilterFactory(Map<String, String> args) {
     super(args);
@@ -110,10 +110,10 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
     cache.registerLoader(new ResourceCache.ResourceTypeLoader<HyphDictionaryConfig, CharArraySet>(RESOURCE_DICT){
       @Override
       public CharArraySet load(ResourceRef<HyphDictionaryConfig, CharArraySet> ref) throws IOException {
-      HyphDictionaryConfig config = ref.getKey();
-      return getWordSet(config.getResourceLoader(), 
-        config.getDictionaryFiles().stream().collect(Collectors.joining(",")), 
-        config.isIgnoreCase());
+        HyphDictionaryConfig config = ref.getKey();
+        return getWordSet(config.getResourceLoader(),
+                config.getDictionaryFiles().stream().collect(Collectors.joining(",")),
+                config.isIgnoreCase());
       }});
     cache.registerLoader(new ResourceCache.ResourceTypeLoader<HyphenatorConfig, HyphenationTree>(RESOURCE_HYPH){
       @Override
@@ -129,7 +129,7 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
         }
       }});
   }
-  
+
   @Override
   public void inform(ResourceLoader loader) throws IOException {
     dictionary = cache.getResource(RESOURCE_DICT.createReference(new HyphDictionaryConfig(
@@ -137,7 +137,7 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
     hyphenator = cache.getResource(RESOURCE_HYPH.createReference(new HyphenatorConfig(
             loader, hypFile, encoding)));
   }
-  
+
   @Override
   public TokenFilter create(TokenStream input) {
     return new HyphenationCompoundWordTokenFilter(input, hyphenator, dictionary, epenthesis, minWordSize, minSubwordSize, maxSubwordSize, onlyLongestMatch, noSubMatches, noOverlappingMatches);

@@ -8,12 +8,12 @@ import java.security.NoSuchAlgorithmException;
 
 public final class HashUtil {
 
-    
+
     private HashUtil(){
         throw new RuntimeException();
     }
 
-        public static final byte[] md5(InputStream is) throws IOException {
+    public static final byte[] md5(InputStream is) throws IOException {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -26,5 +26,5 @@ public final class HashUtil {
             return md.digest();
         }
     }
-        
+
 }

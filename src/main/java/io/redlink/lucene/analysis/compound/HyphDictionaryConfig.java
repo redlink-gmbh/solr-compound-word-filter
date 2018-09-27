@@ -12,17 +12,17 @@ import org.apache.lucene.analysis.util.ResourceLoader;
 import io.redlink.lucene.analysis.util.HashUtil;
 
 public class HyphDictionaryConfig {
-    
-    
+
+
     private final ResourceLoader resourceLoader;
-    
+
     private final List<String> dictionaryFiles;
     private final byte[] dictMd5;
 
     private final boolean ignoreCase;
 
     public HyphDictionaryConfig(ResourceLoader resourceLoader, List<String> dictionaryFiles,
-            boolean ignoreCase) throws IOException {
+                                boolean ignoreCase) throws IOException {
         super();
         this.resourceLoader = resourceLoader;
         this.dictionaryFiles = dictionaryFiles;
@@ -39,11 +39,11 @@ public class HyphDictionaryConfig {
     public List<String> getDictionaryFiles() {
         return dictionaryFiles;
     }
-    
+
     public boolean isIgnoreCase() {
         return ignoreCase;
     }
-    
+
     public ResourceLoader getResourceLoader() {
         return resourceLoader;
     }
@@ -84,7 +84,7 @@ public class HyphDictionaryConfig {
         return "StemmerOverrideDictionaryConfig [dictionar=" + dictionaryFiles + "(md5="
                 + new BigInteger(1, dictMd5).toString(16) + ", ignoreCase=" + ignoreCase + "]";
     }
-    
-    
-    
+
+
+
 }
