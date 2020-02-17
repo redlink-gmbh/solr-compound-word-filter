@@ -57,7 +57,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/redlink-gmbh/solr-compound-word-filter.git</connection>
-        <developerConnection>scm:git@github.com:redlink-gmbh/solr-compound-word-filter.git</developerConnection>
+        <developerConnection>scm:git:ssh://github.com/redlink-gmbh/solr-compound-word-filter.git</developerConnection>
         <url>https://github.com/redlink-gmbh/solr-compound-word-filter</url>
         <tag>HEAD</tag>
     </scm>
