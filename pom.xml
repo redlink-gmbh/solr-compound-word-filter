@@ -83,7 +83,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <solr.version>6.6.2</solr.version>
+        <solr.version>[6.0,)</solr.version>
     </properties>
 
     <dependencies>
@@ -91,12 +91,14 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers-common</artifactId>
             <version>${solr.version}</version>
+            <scope>provided</scope><!-- This module is expected to run in a Solr Server -->
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>20.0</version> <!-- newer versions are incompatible with Solr Highlighting -->
+            <scope>provided</scope><!-- Solr includes a guava version > 20.0 -->
         </dependency>
 
         <!-- LOGGING -->
@@ -104,6 +106,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.7</version>
+            <scope>provided</scope><!-- Solr provides slf4j -->
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
