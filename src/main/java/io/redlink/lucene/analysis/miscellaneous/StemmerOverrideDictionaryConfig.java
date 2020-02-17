@@ -97,7 +97,7 @@ public class StemmerOverrideDictionaryConfig {
 
     @Override
     public String toString() {
-        return "StemmerOverrideDictionaryConfig [dictionar=" + dictionaryFiles + "(md5="
+        return "StemmerOverrideDictionaryConfig [dictionary=" + dictionaryFiles + "(md5="
                 + new BigInteger(1, dictMd5).toString(16) + ", ignoreCase=" + ignoreCase + "]";
     }
     

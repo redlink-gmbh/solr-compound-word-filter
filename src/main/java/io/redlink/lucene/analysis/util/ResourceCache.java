@@ -217,7 +217,7 @@ public class ResourceCache {
         if(loader.getResource() == null){
             throw new NullPointerException("The Resource of the ResourceLoader MUST NOT be NULL!");
         }
-        log.debug("Register Loader for {}", loader.getResource());
+        log.debug("[instance: {}] Register Loader for {}", Integer.toHexString(this.hashCode()), loader.getResource());
         loaders.put(loader.getResource().getKey(), loader);
     }
     
@@ -227,13 +227,14 @@ public class ResourceCache {
         if(loader == null){
             throw new IllegalStateException("No ResourceLoader for " + ref.getType() + " registerd");
         }
-        log.debug("load {} (Loader: {})", ref, loader.getClass().getName());
+        log.debug("[instance: {}] load {} (Loader: {})", Integer.toHexString(this.hashCode()), ref, loader.getClass().getName());
         return loader.load(ref);
     }
     
     @SuppressWarnings("unchecked")
     public <K,R> R getResource(ResourceRef<K, R> ref) throws IOException {
         try {
+            log.debug("[instance: {}] lookup {}", Integer.toHexString(this.hashCode()), ref);
             return (R) resources.get(ref);
         } catch (final ExecutionException e) {
             final Throwable cause = e.getCause();
