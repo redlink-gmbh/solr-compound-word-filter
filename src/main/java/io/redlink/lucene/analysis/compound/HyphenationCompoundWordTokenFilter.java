@@ -45,7 +45,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   private final String[] epenthesis;
 
   /**
-   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
+   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -61,7 +61,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   }
 
   /**
-   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
+   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -86,7 +86,7 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
   }
 
   /**
-   * Creates a new {@link GermanCompoundWordTokenFilter} instance.
+   * Creates a new {@link HyphenationCompoundWordTokenFilter} instance.
    *
    * @param input
    *          the {@link org.apache.lucene.analysis.TokenStream} to process
@@ -125,10 +125,12 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
 
   /**
    * Create a HyphenationCompoundWordTokenFilter with no dictionary.
-   * <p>
-   * Calls {@link #HyphenationCompoundWordTokenFilter(org.apache.lucene.analysis.TokenStream, org.apache.lucene.analysis.compound.hyphenation.HyphenationTree, org.apache.lucene.analysis.CharArraySet, int, int, int, boolean, boolean, boolean)
-   * HyphenationCompoundWordTokenFilter(matchVersion, input, hyphenator,
-   * null, minWordSize, minSubwordSize, maxSubwordSize }
+   * 
+   * @param input the {@link org.apache.lucene.analysis.TokenStream} to process
+   * @param hyphenator the hyphenation pattern tree to use for hyphenation
+   * @param minWordSize only words longer than this get processed
+   * @param minSubwordSize only subwords shorter than this get to the output stream
+   * @param maxSubwordSize only subwords shorter than this get to the output stream
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator, int minWordSize, int minSubwordSize,
@@ -139,10 +141,9 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
 
   /**
    * Create a HyphenationCompoundWordTokenFilter with no dictionary.
-   * <p>
-   * Calls {@link #HyphenationCompoundWordTokenFilter(org.apache.lucene.analysis.TokenStream, org.apache.lucene.analysis.compound.hyphenation.HyphenationTree, int, int, int)
-   * HyphenationCompoundWordTokenFilter(matchVersion, input, hyphenator,
-   * DEFAULT_MIN_WORD_SIZE, DEFAULT_MIN_SUBWORD_SIZE, DEFAULT_MAX_SUBWORD_SIZE }
+   * 
+   * @param input the {@link org.apache.lucene.analysis.TokenStream} to process
+   * @param hyphenator the hyphenation pattern tree to use for hyphenation
    */
   public HyphenationCompoundWordTokenFilter(TokenStream input,
                                             HyphenationTree hyphenator) {

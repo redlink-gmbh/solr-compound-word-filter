@@ -63,7 +63,6 @@ import io.redlink.lucene.analysis.util.ResourceCache.ResourceType;
  * Dictionaries for many languages are available through the OpenOffice project.
  * 
  * See <a href="http://wiki.apache.org/solr/Hunspell">http://wiki.apache.org/solr/Hunspell</a>
- * @lucene.experimental
  * @since 3.5.0
  */
 public class HunspellStemFilterFactory extends TokenFilterFactory implements ResourceLoaderAware {
@@ -86,7 +85,10 @@ public class HunspellStemFilterFactory extends TokenFilterFactory implements Res
   
   private final ResourceCache cache;
   
-  /** Creates a new HunspellStemFilterFactory */
+  /**
+   * Creates a new HunspellStemFilterFactory
+   * @param args the arguments
+   */
   public HunspellStemFilterFactory(Map<String,String> args) {
     super(args);
     dictionaryFiles = require(args, PARAM_DICTIONARY);
@@ -152,7 +154,10 @@ public class HunspellStemFilterFactory extends TokenFilterFactory implements Res
    */
   private static Path DEFAULT_TEMP_DIR;
 
-  /** Used by test framework */
+  /** 
+   * Used by test framework 
+   * @param tempDir the path to the temp directory
+   */
   public static void setDefaultTempDir(Path tempDir) {
     DEFAULT_TEMP_DIR = tempDir;
   }

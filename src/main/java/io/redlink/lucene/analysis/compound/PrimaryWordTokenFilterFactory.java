@@ -77,7 +77,10 @@ public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements
     private final int maxSubwordSize;
     private final boolean onlyLongestMatch;
 
-    /** Creates a new HyphenationCompoundWordTokenFilterFactory */
+    /**
+     * Creates a new HyphenationCompoundWordTokenFilterFactory
+     * @param args the arguments
+     */
     public PrimaryWordTokenFilterFactory(Map<String, String> args) {
         super(args);
         dictFile = get(args, "dictionary");

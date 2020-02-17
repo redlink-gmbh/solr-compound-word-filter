@@ -40,7 +40,10 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
  */
 public class FugenSTokenFilterFactory extends TokenFilterFactory {
 
-    /** Creates a new HyphenationCompoundWordTokenFilterFactory */
+    /**
+     * Creates a new HyphenationCompoundWordTokenFilterFactory
+     * @param args the arguments
+     */
     public FugenSTokenFilterFactory(Map<String, String> args) {
         super(args);
     }

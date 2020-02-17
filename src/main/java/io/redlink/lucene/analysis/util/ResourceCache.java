@@ -80,7 +80,7 @@ import com.google.common.cache.LoadingCache;
  * <li> The {@link ResourceRef} has two responsibilities: First it iss used as key for 
  * the cache so it define equivalence for Resources. Second it needs to provide all the
  * information required by the {@link ResourceTypeLoader} to load the referenced resource
- * <ul>
+ * </ul>
  * 
  * <b>Example Usage</b>
  * <pre>
@@ -89,7 +89,7 @@ import com.google.common.cache.LoadingCache;
  *  
  *      
  *      //(1) Define the Resource Type(s) used by my Component 
- *      public static final ResourceType<MyClass.MyConfig, Dictionary> DICT_RESOURCE = new ResourceType<>(
+ *      public static final ResourceType&lt;MyClass.MyConfig, Dictionary&gt; DICT_RESOURCE = new ResourceType&lt;&gt;(
  *              MyClass.class.getName() +".dict", MyClass.MyConfig.class, Dictionary.class);
  *      
  *      //(2) Get the ResourceCache
@@ -97,9 +97,9 @@ import com.google.common.cache.LoadingCache;
  *      
  *      public MyClass() {
  *          //(3) Tell the ResourceCache how to load my resource types
- *          cache.registerLoader(new ResourceCache.ResourceTypeLoader<MyConfig, Dictionary>(DICT_RESOURCE){
- *              @Override
- *              public Dictionary load(ResourceRef<MyConfig, Dictionary> ref) {
+ *          cache.registerLoader(new ResourceCache.ResourceTypeLoader&lt;MyConfig, Dictionary&gt;(DICT_RESOURCE){
+ *              {@literal @}Override
+ *              public Dictionary load(ResourceRef&lt;MyConfig, Dictionary&gt; ref) {
  *                  MyConfig config = ref.getKey();
  *                  //implement the loading of the resource based on the data provided by the reference
  *                  return null;
@@ -107,7 +107,7 @@ import com.google.common.cache.LoadingCache;
  *          });
  *      }
  *  
- *      @Override
+ *      {@literal @}Override
  *      public void inform(ResourceLoader loader) throws IOException {
  *          //(4) Get the Reference to the Resoruce
  *          //Typically this will be done by parsing the configuration
@@ -123,7 +123,6 @@ import com.google.common.cache.LoadingCache;
  *      //(6) We want only load a single Dictionary for similar configuration. So
  *      // this class needs to implement the check for equivalence (see
  *      // {@link #hashCode()} and {@link #equals(Object)} implementation)
- *      // <p>
  *      // NOTE: In cases the configuration includes resources (e.g. dictionary files)
  *      // it is required to include the hash of those files (e.g. the MD5) in the
  *      // equivalence check. Because if someone change such a file and calls reload
@@ -149,7 +148,7 @@ import com.google.common.cache.LoadingCache;
  *              return caseSensitive;
  *          }
  *  
- *          @Override
+ *          {@literal @}Override
  *          public int hashCode() {
  *              final int prime = 31;
  *              int result = 1;
@@ -159,7 +158,7 @@ import com.google.common.cache.LoadingCache;
  *              return result;
  *          }
  *  
- *          @Override
+ *          {@literal @}Override
  *          public boolean equals(Object obj) {
  *              if (this == obj) return true;
  *              if (obj == null) return false;

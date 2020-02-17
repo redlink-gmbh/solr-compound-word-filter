@@ -55,7 +55,10 @@ public class StemmerOverrideFilterFactory extends TokenFilterFactory implements 
   
   private final ResourceCache cache;
 
-  /** Creates a new StemmerOverrideFilterFactory */
+  /**
+   * Creates a new StemmerOverrideFilterFactory
+   * @param args the arguments
+   */
   public StemmerOverrideFilterFactory(Map<String,String> args) {
     super(args);
     dictionaryFiles = get(args, "dictionary");

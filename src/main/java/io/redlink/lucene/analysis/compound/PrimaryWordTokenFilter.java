@@ -78,6 +78,8 @@ public class PrimaryWordTokenFilter extends CompoundWordTokenFilterBase {
      *            only subwords longer than this get to the output stream
      * @param maxSubwordSize
      *            only subwords shorter than this get to the output stream
+     * @param onlyLongestMatch
+     *            if enabled only the longest match is considered
      */
     public PrimaryWordTokenFilter(TokenStream input, HyphenationTree hyphenator, CharArraySet dictionary,
             int minWordSize, int minSubwordSize, int maxSubwordSize, boolean onlyLongestMatch) {

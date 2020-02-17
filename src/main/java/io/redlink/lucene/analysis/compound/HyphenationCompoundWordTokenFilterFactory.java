@@ -89,7 +89,10 @@ public class HyphenationCompoundWordTokenFilterFactory extends TokenFilterFactor
 
   private final ResourceCache cache;
 
-  /** Creates a new HyphenationCompoundWordTokenFilterFactory */
+  /**
+   * Creates a new HyphenationCompoundWordTokenFilterFactory
+   * @param args the arguments
+   */
   public HyphenationCompoundWordTokenFilterFactory(Map<String, String> args) {
     super(args);
     dictFile = get(args, "dictionary");
