@@ -1,0 +1,47 @@
+name: Build & Test
+
+on:
+  push:
+    branches-ignore:
+      - "master"
+      - "maintenance/v*"
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+permissions:
+  checks: write
+  pull-requests: write
+
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11, 8 ]
+        solr: [ 8.11.1, 7.7.3,  6.6.6 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Java/Maven
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: maven
+      - name: Compile & Test
+        env:
+          SOLR_VERSION: ${{ matrix.solr }}
+        run: mvn -V -B --no-transfer-progress
+          clean package verify
+          -Prelease
+          -Dgpg.skip
+          -Dsolr.version=${SOLR_VERSION}
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: '**/TEST-*.xml'
