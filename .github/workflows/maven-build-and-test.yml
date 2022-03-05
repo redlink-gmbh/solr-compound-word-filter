@@ -45,7 +45,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Test Results (Solr ${{matrix.solr}} / Java${{ matrix.java }})
+          name: Test Results (${{matrix.solr}} - Java${{ matrix.java }})
           path: '**/TEST-*.xml'
 
   publish-test-results:
