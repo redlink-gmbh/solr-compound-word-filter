@@ -16,7 +16,6 @@
 package io.redlink.lucene.analysis.compound;
 
 import java.io.IOException;
-
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.compound.CompoundWordTokenFilterBase;
@@ -46,7 +45,7 @@ public class PrimaryWordTokenFilter extends CompoundWordTokenFilterBase {
 
     public static final boolean DEFAULT_ONLY_LONGEST_MATCH = true;
 
-    private HyphenationTree hyphenator;
+    private final HyphenationTree hyphenator;
 
     /**
      * Creates a new {@link PrimaryWordTokenFilter} instance.
@@ -116,6 +115,7 @@ public class PrimaryWordTokenFilter extends CompoundWordTokenFilterBase {
         return tree;
     }
 
+    @SuppressWarnings("java:S3776")
     @Override
     protected void decompose() {
         // if the token is in the dictionary the token is the primary word
