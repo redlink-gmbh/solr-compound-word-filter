@@ -20,9 +20,10 @@ jobs:
       - name: Label Major Updates
         if: ${{steps.metadata.outputs.update-type == 'version-update:semver-major'}}
         run: |
-          gh label create "major-update" --color "B60205" --description "Major Dependency Update" || true
+          gh label create "major-update" --color "B60205" --description "Major Dependency Update" --repo "$REPO" || true
           gh pr edit "$PR_URL" --add-label "major-update"
         env:
+          REPO: ${{github.repository}}
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Enable Auto-Merge for Patch Updates
