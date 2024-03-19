@@ -26,10 +26,9 @@ public final class HashUtil {
 
 
     private HashUtil(){
-        throw new RuntimeException();
     }
 
-    public static final byte[] md5(InputStream is) throws IOException {
+    public static byte[] md5(InputStream is) throws IOException {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");

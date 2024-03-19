@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -31,27 +30,27 @@ import org.apache.lucene.analysis.tokenattributes.KeywordAttribute;
 /**
  * A {@link org.apache.lucene.analysis.TokenFilter} that removes the
  * Fugen-S used in German with compound words.
- * 
+ * <p>
  * Examles: <ul>
  * <li> Gesundheit(s)vorsorge
  * <li> Sicherheit(s)- und Ordnung(s)dienst
  * </ul>
- * 
+ * <p>
  * Typically this could be done as part of a decomposer, but usages
  * as shown by the 2nd example require to have this as an own
  * {@link TokenFilter}.
- * 
+ * <p>
  * The rule implemented by this {@link TokenFilter} is based on
  * the article <a href="http://www.spiegel.de/kultur/zwiebelfisch/zwiebelfisch-der-gebrauch-des-fugen-s-im-ueberblick-a-293195.html">
  * Der Gebrauch des Fugen-s im Überblick</a>
- * 
+ * <p>
  * This {@link TokenFilter} will not process Token with <code>{@link KeywordAttribute#isKeyword()} == true</code> to
  * prevent processing of words that are in a dictionary
- * 
+ *
  * @author Rupert Westenthaler
  */
 public final class FugenSTokenFilter extends TokenFilter {
-    
+
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final KeywordAttribute keywordAttr = addAttribute(KeywordAttribute.class);
 
@@ -60,6 +59,7 @@ public final class FugenSTokenFilter extends TokenFilter {
      * The {@link #ENDINGS} sorted by the last character to allow for a more efficient lookup
      */
     static Map<Character, Set<CharSequence>> ENDINGS_TREE;
+
     static {
         //based on http://www.spiegel.de/kultur/zwiebelfisch/zwiebelfisch-der-gebrauch-des-fugen-s-im-ueberblick-a-293195.html
         Set<String> endings = new HashSet<>();
@@ -69,39 +69,39 @@ public final class FugenSTokenFilter extends TokenFilter {
         endings.addAll(Arrays.asList("ion", "tät", "heit", "keit", "schaft", "sicht", "ung"));
         //store the endings in a map with the first char as key to allow lookups based on the 2nd last char for tokens ending with an s
         Map<Character, Set<CharSequence>> map = new HashMap<>();
-        endings.forEach(e -> map.computeIfAbsent(e.charAt(e.length()-1), k -> new HashSet<>()).add(e));
+        endings.forEach(e -> map.computeIfAbsent(e.charAt(e.length() - 1), k -> new HashSet<>()).add(e));
         ENDINGS_TREE = Collections.unmodifiableMap(map);
     }
-    
+
     /**
      * Creates a new {@link FugenSTokenFilter} instance.
      *
-     * @param input
-     *            the {@link org.apache.lucene.analysis.TokenStream} to process
+     * @param input the {@link org.apache.lucene.analysis.TokenStream} to process
      */
     public FugenSTokenFilter(TokenStream input) {
         super(input);
     }
-    
+
+    @SuppressWarnings("java:S3776")
     @Override
     public boolean incrementToken() throws IOException {
-      if (input.incrementToken()) {
-        if (!keywordAttr.isKeyword()) {
-          final int length = termAtt.length();
-            if(length >= MIN_LENGTH){
-            if(Character.toLowerCase(termAtt.charAt(termAtt.length()-1)) == 's'){
-              Set<CharSequence> endingsMatches = ENDINGS_TREE.get(Character.valueOf(termAtt.charAt(termAtt.length() - 2)));
-              if(endingsMatches != null && endingsMatches.stream()
-                  .filter(e -> e.length() < termAtt.length() - 1) //token to short for this ending
-                  .anyMatch(e -> e.equals(termAtt.subSequence(length - 1 - e.length(), length - 1)))){
-                termAtt.setLength(length -1); //we found match so consider the tailing s as Fugen-S
-              }
+        if (input.incrementToken()) {
+            if (!keywordAttr.isKeyword()) {
+                final int length = termAtt.length();
+                if (length >= MIN_LENGTH) {
+                    if (Character.toLowerCase(termAtt.charAt(termAtt.length() - 1)) == 's') {
+                        Set<CharSequence> endingsMatches = ENDINGS_TREE.get(Character.valueOf(termAtt.charAt(termAtt.length() - 2)));
+                        if (endingsMatches != null && endingsMatches.stream()
+                                .filter(e -> e.length() < termAtt.length() - 1) //token to short for this ending
+                                .anyMatch(e -> e.equals(termAtt.subSequence(length - 1 - e.length(), length - 1)))) {
+                            termAtt.setLength(length - 1); //we found match so consider the tailing s as Fugen-S
+                        }
+                    }
+                }
             }
-          }
+            return true;
+        } else {
+            return false;
         }
-        return true;
-      } else {
-        return false;
-      }
     }
 }
