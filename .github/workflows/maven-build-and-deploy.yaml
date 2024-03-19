@@ -28,7 +28,7 @@ jobs:
       - name: Detect Version
         id: version
         run: VERSION=$(mvn -B -q -N exec:exec -Dexec.executable=echo -Dexec.args='${project.version}')
-          echo "::set-output name=version::${VERSION}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
   build-and-test:
     name: Build and Test (Solr ${{matrix.solr}} / Java${{ matrix.java }})
