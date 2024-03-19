@@ -16,16 +16,14 @@
 
 package io.redlink.lucene.analysis.hunspell;
 
+import io.redlink.lucene.analysis.util.HashUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.lucene.analysis.util.ResourceLoader;
-
-import io.redlink.lucene.analysis.util.HashUtil;
+import org.apache.lucene.util.ResourceLoader;
 
 public class HunspellDictionaryConfig {
 

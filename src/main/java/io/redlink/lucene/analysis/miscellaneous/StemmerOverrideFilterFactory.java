@@ -17,20 +17,18 @@
 package io.redlink.lucene.analysis.miscellaneous;
 
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter;
-import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter.StemmerOverrideMap;
-import org.apache.lucene.analysis.util.ResourceLoader;
-import org.apache.lucene.analysis.util.ResourceLoaderAware;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
-
 import io.redlink.lucene.analysis.util.ResourceCache;
 import io.redlink.lucene.analysis.util.ResourceCache.ResourceRef;
 import io.redlink.lucene.analysis.util.ResourceCache.ResourceType;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import org.apache.lucene.analysis.TokenFilterFactory;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter;
+import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter.StemmerOverrideMap;
+import org.apache.lucene.util.ResourceLoader;
+import org.apache.lucene.util.ResourceLoaderAware;
 
 /**
  * Factory for {@link StemmerOverrideFilter}.

@@ -16,10 +16,9 @@
 package io.redlink.lucene.analysis.de;
 
 import java.util.Map;
-
 import org.apache.lucene.analysis.TokenFilter;
+import org.apache.lucene.analysis.TokenFilterFactory;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
 
 /**
  * Factory for {@link FugenSTokenFilter}.
