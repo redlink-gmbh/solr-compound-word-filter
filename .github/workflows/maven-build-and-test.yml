@@ -3,7 +3,7 @@ name: Build & Test
 on:
   push:
     branches-ignore:
-      - "master"
+      - "main"
       - "maintenance/v*"
   pull_request:
     types: [ opened, synchronize, reopened ]

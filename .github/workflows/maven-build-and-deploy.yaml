@@ -3,7 +3,7 @@ name: Build, Test & Publish
 on:
   push:
     branches:
-      - "master"
+      - "main"
       - "maintenance/*"
     tags:
       - "v*"
