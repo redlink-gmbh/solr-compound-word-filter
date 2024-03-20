@@ -79,6 +79,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: 'test-results/**/TEST-*.xml'
+          action_fail_on_inconclusive: 'true'
 
   deploy:
     name: Publish

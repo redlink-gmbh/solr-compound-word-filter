@@ -58,7 +58,7 @@ jobs:
       - name: Fetch Test-Results
         uses: actions/download-artifact@v3
         with:
-          path: test-results-off
+          path: test-results
       - name: Publish Test-Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
