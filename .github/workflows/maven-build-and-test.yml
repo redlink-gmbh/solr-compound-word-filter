@@ -36,14 +36,14 @@ jobs:
       - name: Compile & Test
         env:
           LUCENE_VERSION: ${{ matrix.lucene }}
-        run: mvn -V -B --no-transfer-progress
+        run: ./mvnw -V -B --no-transfer-progress
           clean package verify
           -Prelease
           -Dgpg.skip
           -Dlucene.version=${LUCENE_VERSION}
       - name: Upload Test-Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Test Results (${{matrix.lucene}} - Java${{ matrix.java }})
           path: '**/TEST-*.xml'
@@ -56,10 +56,11 @@ jobs:
 
     steps:
       - name: Fetch Test-Results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: test-results
       - name: Publish Test-Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: 'test-results/**/TEST-*.xml'
+          action_fail_on_inconclusive: 'true'
