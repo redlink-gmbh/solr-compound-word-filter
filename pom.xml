@@ -81,7 +81,7 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <lucene.version>[9.1,9.10]</lucene.version>
+        <lucene.version>[9.1,9.99]</lucene.version>
     </properties>
 
     <dependencies>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version> <!-- newer versions are incompatible with Solr Highlighting -->
+            <version>31.0.1-jre</version>
             <scope>provided</scope><!-- Solr 9 includes a guava version > 31.0 -->
         </dependency>
 
