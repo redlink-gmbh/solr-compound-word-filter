@@ -81,7 +81,7 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <lucene.version>[9.0.0,9]</lucene.version>
+        <lucene.version>[9.1,9.10]</lucene.version>
     </properties>
 
     <dependencies>
