@@ -110,9 +110,9 @@
             <scope>provided</scope><!-- Solr provides slf4j -->
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.3</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
