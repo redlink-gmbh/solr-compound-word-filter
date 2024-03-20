@@ -36,7 +36,7 @@ jobs:
       - name: Compile & Test
         env:
           SOLR_VERSION: ${{ matrix.solr }}
-        run: mvn -V -B --no-transfer-progress
+        run: ./mvnw -V -B --no-transfer-progress
           clean package verify
           -Prelease
           -Dgpg.skip

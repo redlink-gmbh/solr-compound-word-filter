@@ -27,7 +27,7 @@ jobs:
           cache: maven
       - name: Detect Version
         id: version
-        run: VERSION=$(mvn -B -q -N exec:exec -Dexec.executable=echo -Dexec.args='${project.version}')
+        run: VERSION=$(./mvnw -B -q -N exec:exec -Dexec.executable=echo -Dexec.args='${project.version}')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
   build-and-test:
@@ -52,7 +52,7 @@ jobs:
       - name: Compile & Test
         env:
           SOLR_VERSION: ${{ matrix.solr }}
-        run: mvn -V -B --no-transfer-progress
+        run: ./mvnw -V -B --no-transfer-progress
           clean package verify
           -Prelease
           -Dgpg.skip
@@ -104,7 +104,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish Packages
-        run: mvn -B --no-transfer-progress
+        run: ./mvnw -B --no-transfer-progress
           package deploy
           -Prelease
           -Dquick
