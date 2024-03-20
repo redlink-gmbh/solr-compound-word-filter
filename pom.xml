@@ -269,6 +269,13 @@
                         </executions>
                         <configuration>
                             <source>${java.version}</source>
+                            <tags>
+                                <tag>
+                                    <name>lucene.spi</name>
+                                    <placement>t</placement>
+                                    <head>SPI Name (case-insensitive):</head>
+                                </tag>
+                            </tags>
                         </configuration>
                     </plugin>
                     <plugin>
