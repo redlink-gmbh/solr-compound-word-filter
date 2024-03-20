@@ -98,7 +98,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
+            <version>33.1.0-jre</version>
             <scope>provided</scope><!-- Solr 9 includes a guava version > 31.0 -->
         </dependency>
 
