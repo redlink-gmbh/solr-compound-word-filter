@@ -37,7 +37,7 @@ jobs:
         env:
           LUCENE_VERSION: ${{ matrix.lucene }}
         run: ./mvnw -V -B --no-transfer-progress
-          clean package verify
+          clean verify
           -Prelease
           -Dgpg.skip
           -Dlucene.version=${LUCENE_VERSION}
