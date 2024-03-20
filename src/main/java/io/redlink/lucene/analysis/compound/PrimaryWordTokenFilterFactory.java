@@ -18,16 +18,15 @@ package io.redlink.lucene.analysis.compound;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenFilter;
+import org.apache.lucene.analysis.TokenFilterFactory;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.compound.CompoundWordTokenFilterBase;
 import org.apache.lucene.analysis.compound.hyphenation.HyphenationTree;
-import org.apache.lucene.analysis.util.ResourceLoader;
-import org.apache.lucene.analysis.util.ResourceLoaderAware;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.util.IOUtils;
+import org.apache.lucene.util.ResourceLoader;
+import org.apache.lucene.util.ResourceLoaderAware;
 import org.xml.sax.InputSource;
 
 /**
@@ -65,8 +64,13 @@ import org.xml.sax.InputSource;
  *
  * @see PrimaryWordTokenFilter
  * @author Rupert Westenthaler
+ * @lucene.spi {@value #NAME}
  */
 public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements ResourceLoaderAware {
+
+    /** SPI name */
+    public static final String NAME = "primaryWord";
+
     private CharArraySet dictionary;
     private HyphenationTree hyphenator;
     private final String dictFile;
@@ -76,6 +80,11 @@ public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements
     private final int minSubwordSize;
     private final int maxSubwordSize;
     private final boolean onlyLongestMatch;
+
+    /** Default ctor for compatibility with SPI */
+    public PrimaryWordTokenFilterFactory() {
+        throw defaultCtorException();
+    }
 
     /**
      * Creates a new HyphenationCompoundWordTokenFilterFactory

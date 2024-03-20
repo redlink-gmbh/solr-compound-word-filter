@@ -16,10 +16,9 @@
 package io.redlink.lucene.analysis.de;
 
 import java.util.Map;
-
 import org.apache.lucene.analysis.TokenFilter;
+import org.apache.lucene.analysis.TokenFilterFactory;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
 
 /**
  * Factory for {@link FugenSTokenFilter}.
@@ -37,8 +36,17 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
  *
  * @see FugenSTokenFilter
  * @author Rupert Westenthaler
+ * @lucene.spi {@value #NAME}
  */
 public class FugenSTokenFilterFactory extends TokenFilterFactory {
+
+    /** SPI name */
+    public static final String NAME = "fugenS";
+
+    /** Default ctor for compatibility with SPI */
+    public FugenSTokenFilterFactory() {
+        super();
+    }
 
     /**
      * Creates a new HyphenationCompoundWordTokenFilterFactory

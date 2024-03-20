@@ -19,7 +19,7 @@
 
     <groupId>io.redlink.solr</groupId>
     <artifactId>compound-word-filter</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 
     <name>Compound Word Filters</name>
     <url>https://github.com/redlink-gmbh/solr-compound-word-filter</url>
@@ -33,13 +33,13 @@
 
     <organization>
         <name>Redlink GmbH</name>
-        <url>http://redlink.at</url>
+        <url>https://redlink.at</url>
     </organization>
 
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             <distribution>repo</distribution>
             <comments>A business-friendly OSS license</comments>
         </license>
@@ -48,7 +48,7 @@
     <developers>
         <developer>
             <name>Rupert Westenthaler</name>
-            <email>rupert.westenthaler@redlink.co</email>
+            <email>rupert.westenthaler@redlink.at</email>
         </developer>
     </developers>
 
@@ -78,25 +78,28 @@
     </distributionManagement>
 
     <properties>
-        <java.version>8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <solr.version>[6.0,9)</solr.version>
+        <!-- Use an insane high minor-version for the upper bound
+            to indicate that we are interested in
+            everything before 10.0.0 -->
+        <lucene.version>[9.1,9.999]</lucene.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-common</artifactId>
-            <version>${solr.version}</version>
+            <artifactId>lucene-analysis-common</artifactId>
+            <version>${lucene.version}</version>
             <scope>provided</scope><!-- This module is expected to run in a Solr Server -->
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version> <!-- newer versions are incompatible with Solr Highlighting -->
-            <scope>provided</scope><!-- Solr includes a guava version > 20.0 -->
+            <version>31.0.1-jre</version>
+            <scope>provided</scope><!-- Solr 9 includes a guava version > 31.0 -->
         </dependency>
 
         <!-- LOGGING -->
@@ -121,7 +124,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-test-framework</artifactId>
-            <version>${solr.version}</version>
+            <version>${lucene.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -269,6 +272,13 @@
                         </executions>
                         <configuration>
                             <source>${java.version}</source>
+                            <tags>
+                                <tag>
+                                    <name>lucene.spi</name>
+                                    <placement>t</placement>
+                                    <head>SPI Name (case-insensitive):</head>
+                                </tag>
+                            </tags>
                         </configuration>
                     </plugin>
                     <plugin>

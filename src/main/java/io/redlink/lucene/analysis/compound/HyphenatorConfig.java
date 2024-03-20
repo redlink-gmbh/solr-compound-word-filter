@@ -16,14 +16,12 @@
 
 package io.redlink.lucene.analysis.compound;
 
+import io.redlink.lucene.analysis.util.HashUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
-
-import org.apache.lucene.analysis.util.ResourceLoader;
-
-import io.redlink.lucene.analysis.util.HashUtil;
+import org.apache.lucene.util.ResourceLoader;
 
 public class HyphenatorConfig {
     
