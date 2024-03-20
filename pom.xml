@@ -81,7 +81,10 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <lucene.version>[9.1,9.99]</lucene.version>
+        <!-- Use an insane high minor-version for the upper bound
+            to indicate that we are interested in
+            everything before 10.0.0 -->
+        <lucene.version>[9.1,9.999]</lucene.version>
     </properties>
 
     <dependencies>
