@@ -64,6 +64,7 @@ import org.xml.sax.InputSource;
  *
  * @see PrimaryWordTokenFilter
  * @author Rupert Westenthaler
+ * @lucene.spi {@value #NAME}
  */
 public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements ResourceLoaderAware {
 

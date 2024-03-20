@@ -36,6 +36,7 @@ import org.apache.lucene.analysis.TokenStream;
  *
  * @see FugenSTokenFilter
  * @author Rupert Westenthaler
+ * @lucene.spi {@value #NAME}
  */
 public class FugenSTokenFilterFactory extends TokenFilterFactory {
 
