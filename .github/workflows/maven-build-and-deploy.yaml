@@ -59,7 +59,7 @@ jobs:
           -Dsolr.version=${SOLR_VERSION}
       - name: Upload Test-Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Test Results (${{matrix.solr}} - Java${{ matrix.java }})
           path: '**/TEST-*.xml'
