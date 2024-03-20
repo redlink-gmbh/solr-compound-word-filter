@@ -66,6 +66,10 @@ import org.xml.sax.InputSource;
  * @author Rupert Westenthaler
  */
 public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements ResourceLoaderAware {
+
+    /** SPI name */
+    public static final String NAME = "primaryWord";
+
     private CharArraySet dictionary;
     private HyphenationTree hyphenator;
     private final String dictFile;
@@ -75,6 +79,11 @@ public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements
     private final int minSubwordSize;
     private final int maxSubwordSize;
     private final boolean onlyLongestMatch;
+
+    /** Default ctor for compatibility with SPI */
+    public PrimaryWordTokenFilterFactory() {
+        throw defaultCtorException();
+    }
 
     /**
      * Creates a new HyphenationCompoundWordTokenFilterFactory

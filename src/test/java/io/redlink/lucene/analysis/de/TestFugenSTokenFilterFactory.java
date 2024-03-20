@@ -17,19 +17,10 @@ package io.redlink.lucene.analysis.de;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.lucene.analysis.AbstractAnalysisFactory;
-import org.apache.lucene.analysis.BaseTokenStreamTestCase;
+import org.apache.lucene.analysis.BaseTokenStreamFactoryTestCase;
 import org.apache.lucene.analysis.MockTokenizer;
-import org.apache.lucene.analysis.TokenFilterFactory;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.util.ClasspathResourceLoader;
-import org.apache.lucene.util.ResourceLoader;
-import org.apache.lucene.util.ResourceLoaderAware;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 /**
@@ -39,7 +30,7 @@ import org.junit.Test;
  * @author Rupert Westenthaler
  *
  */
-public class TestFugenSTokenFilterFactory extends BaseTokenStreamTestCase {
+public class TestFugenSTokenFilterFactory extends BaseTokenStreamFactoryTestCase {
 
     @Test
     public void testFugenSTokenFilterFactory() throws Exception {
@@ -52,71 +43,4 @@ public class TestFugenSTokenFilterFactory extends BaseTokenStreamTestCase {
                 new String[] { "Reis", "Sicherheit", "und", "Ordnungsdienst"});
     }
 
-    /*
-     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     * - - - - - - - - Helper Methods copied from
-     * org.apache.lucene.analysis.util.BaseTokenStreamFactoryTestCase (because
-     * they are not not available in the lucene-test-framework) - - - - - - - -
-     * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     */
-
-    private AbstractAnalysisFactory analysisFactory(Class<? extends AbstractAnalysisFactory> clazz,
-            Version matchVersion, ResourceLoader loader, String... keysAndValues) throws Exception {
-        if (keysAndValues.length % 2 == 1) {
-            throw new IllegalArgumentException("invalid keysAndValues map");
-        }
-        Map<String, String> args = new HashMap<>();
-        for (int i = 0; i < keysAndValues.length; i += 2) {
-            String previous = args.put(keysAndValues[i], keysAndValues[i + 1]);
-            assertNull("duplicate values for key: " + keysAndValues[i], previous);
-        }
-        if (matchVersion != null) {
-            String previous = args.put("luceneMatchVersion", matchVersion.toString());
-            assertNull("duplicate values for key: luceneMatchVersion", previous);
-        }
-        AbstractAnalysisFactory factory = null;
-        try {
-            factory = clazz.getConstructor(Map.class).newInstance(args);
-        } catch (InvocationTargetException e) {
-            // to simplify tests that check for illegal parameters
-            if (e.getCause() instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) e.getCause();
-            } else {
-                throw e;
-            }
-        }
-        if (factory instanceof ResourceLoaderAware) {
-            ((ResourceLoaderAware) factory).inform(loader);
-        }
-        return factory;
-    }
-
-    /**
-     * Returns a fully initialized TokenFilterFactory with the specified name
-     * and key-value arguments. {@link ClasspathResourceLoader} is used for
-     * loading resources, so any required ones should be on the test classpath.
-     */
-    private TokenFilterFactory tokenFilterFactory(String name, Version version, String... keysAndValues)
-            throws Exception {
-        return tokenFilterFactory(name, version, new ClasspathResourceLoader(getClass()), keysAndValues);
-    }
-
-    /**
-     * Returns a fully initialized TokenFilterFactory with the specified name
-     * and key-value arguments. {@link ClasspathResourceLoader} is used for
-     * loading resources, so any required ones should be on the test classpath.
-     */
-    private TokenFilterFactory tokenFilterFactory(String name, String... keysAndValues) throws Exception {
-        return tokenFilterFactory(name, Version.LATEST, keysAndValues);
-    }
-
-    /**
-     * Returns a fully initialized TokenFilterFactory with the specified name,
-     * version, resource loader, and key-value arguments.
-     */
-    private TokenFilterFactory tokenFilterFactory(String name, Version matchVersion, ResourceLoader loader,
-            String... keysAndValues) throws Exception {
-        return (TokenFilterFactory) analysisFactory(TokenFilterFactory.lookupClass(name), matchVersion, loader,
-                keysAndValues);
-    }
 }

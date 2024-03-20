@@ -39,6 +39,14 @@ import org.apache.lucene.analysis.TokenStream;
  */
 public class FugenSTokenFilterFactory extends TokenFilterFactory {
 
+    /** SPI name */
+    public static final String NAME = "fugenS";
+
+    /** Default ctor for compatibility with SPI */
+    public FugenSTokenFilterFactory() {
+        super();
+    }
+
     /**
      * Creates a new HyphenationCompoundWordTokenFilterFactory
      * @param args the arguments
