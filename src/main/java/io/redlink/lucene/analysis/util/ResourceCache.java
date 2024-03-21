@@ -16,15 +16,15 @@
 
 package io.redlink.lucene.analysis.util;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URLClassLoader;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenFilterFactory;
 import org.apache.lucene.analysis.hunspell.HunspellStemFilter;
@@ -188,7 +188,7 @@ public class ResourceCache {
      * Garbage Collector is in charge to decide when a cached resource is no longer
      * needed and can be removed from the cache
      */
-    private final LoadingCache<ResourceRef<?,?>, Object> resources = CacheBuilder.newBuilder()
+    private final LoadingCache<ResourceRef<?,?>, Object> resources = Caffeine.newBuilder()
             .maximumSize(Integer.MAX_VALUE)
             .weakValues() 
             .build(
@@ -233,7 +233,7 @@ public class ResourceCache {
         try {
             log.debug("[instance: {}] lookup {}", Integer.toHexString(this.hashCode()), ref);
             return (R) resources.get(ref);
-        } catch (final ExecutionException e) {
+        } catch (final CompletionException e) {
             final Throwable cause = e.getCause();
             if(cause instanceof IOException){
                 throw (IOException) cause;
