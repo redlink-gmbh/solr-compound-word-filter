@@ -106,7 +106,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <version>2.0.12</version>
             <scope>provided</scope><!-- Solr provides slf4j -->
         </dependency>
         <dependency>
