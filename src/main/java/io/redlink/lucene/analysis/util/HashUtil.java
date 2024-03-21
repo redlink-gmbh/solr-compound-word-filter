@@ -37,7 +37,10 @@ public final class HashUtil {
         }
         try (DigestInputStream dis = new DigestInputStream(is, md)) {
             byte[] buff = new byte[4096];
-            while (dis.read(buff) > 0); // just read to get the Digest filled...
+            //noinspection StatementWithEmptyBody
+            while (dis.read(buff) > 0) {
+                // just read to get the Digest filled...
+            }
             return md.digest();
         }
     }

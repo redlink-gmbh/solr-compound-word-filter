@@ -91,35 +91,47 @@ public class HunspellDictionaryConfig {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         HunspellDictionaryConfig other = (HunspellDictionaryConfig) obj;
         if (affixFile == null) {
-            if (other.affixFile != null)
+            if (other.affixFile != null) {
                 return false;
-        } else if (!affixFile.equals(other.affixFile))
+            }
+        } else if (!affixFile.equals(other.affixFile)) {
             return false;
+        }
         if (affixMd5 == null) {
-            if (other.affixMd5 != null)
+            if (other.affixMd5 != null) {
                 return false;
-        } else if (!Arrays.equals(affixMd5, other.affixMd5))
+            }
+        } else if (!Arrays.equals(affixMd5, other.affixMd5)) {
             return false;
+        }
         if (dictionaryFiles == null) {
-            if (other.dictionaryFiles != null)
+            if (other.dictionaryFiles != null) {
                 return false;
-        } else if (!dictionaryFiles.equals(other.dictionaryFiles))
+            }
+        } else if (!dictionaryFiles.equals(other.dictionaryFiles)) {
             return false;
+        }
         if (dictMd5 == null) {
-            if (other.dictMd5 != null)
+            if (other.dictMd5 != null) {
                 return false;
-        } else if (!Arrays.equals(dictMd5, other.dictMd5))
+            }
+        } else if (!Arrays.equals(dictMd5, other.dictMd5)) {
             return false;
-        if (ignoreCase != other.ignoreCase)
+        }
+        if (ignoreCase != other.ignoreCase) {
             return false;
+        }
         return true;
     }
 
