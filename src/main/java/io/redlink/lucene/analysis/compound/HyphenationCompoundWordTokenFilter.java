@@ -253,11 +253,8 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
      */
     static boolean regionMatches(final CharSequence cs, final int thisStart,
                                  final CharSequence substring, final int start, final int length) {
-        int index1 = thisStart;
-        int index2 = start;
-        int tmpLen = length;
 
-        // Extract these first so we detect NPEs the same as the java.lang.String version
+        // Extract these first, so we detect NPEs the same as the java.lang.String version
         final int srcLen = cs.length() - thisStart;
         final int otherLen = substring.length() - start;
 
@@ -271,6 +268,9 @@ public class HyphenationCompoundWordTokenFilter extends CompoundWordTokenFilterB
             return false;
         }
 
+        int index1 = thisStart;
+        int index2 = start;
+        int tmpLen = length;
         while (tmpLen-- > 0) {
             final char c1 = cs.charAt(index1++);
             final char c2 = substring.charAt(index2++);
