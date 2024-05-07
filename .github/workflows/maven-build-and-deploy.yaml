@@ -15,7 +15,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.5
         name: Checkout
         with:
           fetch-depth: 2
@@ -40,7 +40,7 @@ jobs:
         lucene: [ 9.10.0, 9.1.0 ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.4
+        uses: actions/checkout@v4.1.5
         with:
           fetch-depth: 0
       - name: Set up Java/Maven
@@ -90,7 +90,7 @@ jobs:
     if: github.repository == 'redlink-gmbh/solr-compound-word-filter'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.4
+        uses: actions/checkout@v4.1.5
       - name: Set up Java/Maven
         uses: actions/setup-java@v4
         with:
