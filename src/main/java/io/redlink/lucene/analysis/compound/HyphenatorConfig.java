@@ -65,25 +65,33 @@ public class HyphenatorConfig {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         HyphenatorConfig other = (HyphenatorConfig) obj;
         if (encoding == null) {
-            if (other.encoding != null)
+            if (other.encoding != null) {
                 return false;
-        } else if (!encoding.equals(other.encoding))
+            }
+        } else if (!encoding.equals(other.encoding)) {
             return false;
-        if (!Arrays.equals(hyphMd5, other.hyphMd5))
+        }
+        if (!Arrays.equals(hyphMd5, other.hyphMd5)) {
             return false;
+        }
         if (hyphFile == null) {
-            if (other.hyphFile != null)
+            if (other.hyphFile != null) {
                 return false;
-        } else if (!hyphFile.equals(other.hyphFile))
+            }
+        } else if (!hyphFile.equals(other.hyphFile)) {
             return false;
+        }
         return true;
     }
 

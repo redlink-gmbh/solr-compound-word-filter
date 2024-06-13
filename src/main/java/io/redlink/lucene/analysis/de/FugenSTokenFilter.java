@@ -54,11 +54,11 @@ public final class FugenSTokenFilter extends TokenFilter {
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final KeywordAttribute keywordAttr = addAttribute(KeywordAttribute.class);
 
-    private final static int MIN_LENGTH = 4; //shortest ending ('en') + 's' + at least one char of the word
+    private static final int MIN_LENGTH = 4; //shortest ending ('en') + 's' + at least one char of the word
     /**
      * The {@link #ENDINGS} sorted by the last character to allow for a more efficient lookup
      */
-    static Map<Character, Set<CharSequence>> ENDINGS_TREE;
+    static final Map<Character, Set<CharSequence>> ENDINGS_TREE;
 
     static {
         //based on http://www.spiegel.de/kultur/zwiebelfisch/zwiebelfisch-der-gebrauch-des-fugen-s-im-ueberblick-a-293195.html

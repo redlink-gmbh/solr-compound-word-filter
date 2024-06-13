@@ -108,8 +108,10 @@ public class PrimaryWordTokenFilterFactory extends TokenFilterFactory implements
     public void inform(ResourceLoader loader) throws IOException {
         InputStream stream = null;
         try {
-            if (dictFile != null) // the dictionary can be empty.
+            // the dictionary can be empty.
+            if (dictFile != null) {
                 dictionary = getWordSet(loader, dictFile, false);
+            }
             // TODO: Broken, because we cannot resolve real system id
             // ResourceLoader should also supply method like ClassLoader to get
             // resource URL
