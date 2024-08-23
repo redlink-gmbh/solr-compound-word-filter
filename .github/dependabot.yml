@@ -14,3 +14,8 @@ updates:
     directory: /
     schedule:
       interval: "daily"
+    groups:
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins:*"
+          - "org.codehaus.mojo:*"
