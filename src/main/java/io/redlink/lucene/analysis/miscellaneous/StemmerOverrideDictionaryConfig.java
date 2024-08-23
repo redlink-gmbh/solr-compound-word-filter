@@ -74,22 +74,29 @@ public class StemmerOverrideDictionaryConfig {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         StemmerOverrideDictionaryConfig other = (StemmerOverrideDictionaryConfig) obj;
-        if (!Arrays.equals(dictMd5, other.dictMd5))
+        if (!Arrays.equals(dictMd5, other.dictMd5)) {
             return false;
+        }
         if (dictionaryFiles == null) {
-            if (other.dictionaryFiles != null)
+            if (other.dictionaryFiles != null) {
                 return false;
-        } else if (!dictionaryFiles.equals(other.dictionaryFiles))
+            }
+        } else if (!dictionaryFiles.equals(other.dictionaryFiles)) {
             return false;
-        if (ignoreCase != other.ignoreCase)
+        }
+        if (ignoreCase != other.ignoreCase) {
             return false;
+        }
         return true;
     }
 
